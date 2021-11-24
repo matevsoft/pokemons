@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_23_182443) do
-
+ActiveRecord::Schema.define(version: 2021_11_24_091959) do
   create_table "pokemons", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.integer "base_experience"
@@ -21,8 +20,12 @@ ActiveRecord::Schema.define(version: 2021_11_23_182443) do
     t.text "types"
   end
 
+  create_table "pokemons_types", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "pokemon_id", null: false
+    t.bigint "type_id", null: false
+  end
+
   create_table "types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
   end
-
 end

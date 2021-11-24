@@ -23,22 +23,21 @@ class PokemonsController < ApplicationController
   private
 
   def fill_pokemons
-    n = 1
-    while n < 30
-      @response = AppServices::PokemonApiService.new(n).call
-      @types = []
-      @response['types'].each do |ts|
-        @types << ts['type']['name']
-      end
-      Pokemon.create(
-        name: @response['name'],
-        base_experience: @response['base_experience'],
-        height: @response['height'],
-        order: @response['order'],
-        weight: @response['weight'],
-        types: @types
+    @colection_response = AppServices::PokemonApiService.new('pokemon', '').call
+    @colection_response.parsed_response['results'].each do |pokemon|
+      @pokemon_responce = AppServices::PokemonApiService.new('pokemon', pokemon['name']).call
+      @pokemon_db_rekord = Pokemon.create(
+        name: @pokemon_responce['name'],
+        base_experience: @pokemon_responce['base_experience'],
+        height: @pokemon_responce['height'],
+        order: @pokemon_responce['order'],
+        weight: @pokemon_responce['weight']
       )
-      n += 1
+      @pokemon_responce['types'].each do |type|
+        @type_name = type['type']['name']
+        @type_db_rekord = Type.find_or_create_by(name: @type_name) if @type_name.present?
+        @pokemon_db_rekord.types << @type_db_rekord
+      end
     end
   end
 end
