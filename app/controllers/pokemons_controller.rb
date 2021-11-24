@@ -25,18 +25,18 @@ class PokemonsController < ApplicationController
   def fill_pokemons
     @colection_response = AppServices::PokemonApiService.new('pokemon', '').call
     @colection_response.parsed_response['results'].each do |pokemon|
-      @pokemon_responce = AppServices::PokemonApiService.new('pokemon', pokemon['name']).call
-      @pokemon_db_rekord = Pokemon.create(
-        name: @pokemon_responce['name'],
-        base_experience: @pokemon_responce['base_experience'],
-        height: @pokemon_responce['height'],
-        order: @pokemon_responce['order'],
-        weight: @pokemon_responce['weight']
+      @pokemon_response = AppServices::PokemonApiService.new('pokemon', pokemon['name']).call
+      @pokemon_db_record = Pokemon.create(
+        name: @pokemon_response['name'],
+        base_experience: @pokemon_response['base_experience'],
+        height: @pokemon_response['height'],
+        order: @pokemon_response['order'],
+        weight: @pokemon_response['weight']
       )
-      @pokemon_responce['types'].each do |type|
+      @pokemon_response['types'].each do |type|
         @type_name = type['type']['name']
-        @type_db_rekord = Type.find_or_create_by(name: @type_name) if @type_name.present?
-        @pokemon_db_rekord.types << @type_db_rekord
+        @type_db_record = Type.find_or_create_by(name: @type_name) if @type_name.present?
+        @pokemon_db_record.types << @type_db_record
       end
     end
   end
